@@ -2,3 +2,6 @@
 /Transparency/Temp
 Library
 Temp
+*.csproj
+*.sln
+*.suo
