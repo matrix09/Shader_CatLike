@@ -50,18 +50,23 @@ public class HexMesh : MonoBehaviour {
 
             AddTriangleColor(cell.color);
 
-            Vector3 v3 = center + HexMetrics.GetFirstDirCorner(i);
-            Vector3 v4 = center + HexMetrics.GetSecDirCorner(i);
+            //Vector3 v3 = center + HexMetrics.GetFirstDirCorner(i);
+            //Vector3 v4 = center + HexMetrics.GetSecDirCorner(i);
+
+            Vector3 v3 = v1 + HexMetrics.GetBridge(i);
+            Vector3 v4 = v2 + HexMetrics.GetBridge(i);
+
 
             AddQuad(v1, v2, v3, v4);
 
             //get cell neighbor
             HexCell neighbor = cell.GetHexNeighbour(i) ?? cell;// neighbor == null ? cell : neighbor;;
-            HexCell preneighbor = cell.GetHexNeighbour(HexDirectionExtensions.GetPreviousDir(i)) ?? cell;
-            HexCell nexneighbor = cell.GetHexNeighbour(HexDirectionExtensions.GetNextDir(i)) ?? cell;
+            //HexCell preneighbor = cell.GetHexNeighbour(HexDirectionExtensions.GetPreviousDir(i)) ?? cell;
+            //HexCell nexneighbor = cell.GetHexNeighbour(HexDirectionExtensions.GetNextDir(i)) ?? cell;
 
             //set triangle color
-            AddQuadColor(cell.color, cell.color, (neighbor.color + cell.color + preneighbor.color) / 3f, (neighbor.color + cell.color + nexneighbor.color) / 3f);
+            //AddQuadColor(cell.color, cell.color, (neighbor.color + cell.color + preneighbor.color) / 3f, (neighbor.color + cell.color + nexneighbor.color) / 3f);
+            AddQuadColor(cell.color, (cell.color + neighbor.color) * 0.5f);
 		}   
 	}
 
@@ -85,6 +90,16 @@ public class HexMesh : MonoBehaviour {
         colors.Add(c2);
         colors.Add(c3);
         colors.Add(c4);
+    }
+
+
+    void AddQuadColor(Color c1, Color c2)
+    {
+        colors.Add(c1);
+        colors.Add(c1);
+        colors.Add(c2);
+        colors.Add(c2);
+
     }
 
 

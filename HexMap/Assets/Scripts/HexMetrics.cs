@@ -21,6 +21,14 @@ public static class HexMetrics {
 	};
 
 
+    /// <summary>
+    /// get distance between v1 and v3
+    /// </summary>
+    /// <returns></returns>
+    public static Vector3 GetBridge(HexDir dir)
+    {
+        return (corners[(int)dir] + corners[(int)dir + 1]) * 0.5f * BlendFactor;
+    }
 
 
     public static Vector3 GetFirstDirCorner(HexDir dir)
