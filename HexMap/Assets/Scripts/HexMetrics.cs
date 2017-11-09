@@ -27,7 +27,7 @@ public static class HexMetrics {
     /// <returns></returns>
     public static Vector3 GetBridge(HexDir dir)
     {
-        return (corners[(int)dir] + corners[(int)dir + 1]) * 0.5f * BlendFactor;
+        return (corners[(int)dir] + corners[(int)dir + 1]) * BlendFactor;
     }
 
 

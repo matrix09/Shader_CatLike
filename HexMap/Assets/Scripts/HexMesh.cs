@@ -50,35 +50,62 @@ public class HexMesh : MonoBehaviour {
 
             AddTriangleColor(cell.color);
 
+            if (i <= HexDir.SE)
+                TriangulateConnection(i, cell, v1, v2);
             //Vector3 v3 = center + HexMetrics.GetFirstDirCorner(i);
             //Vector3 v4 = center + HexMetrics.GetSecDirCorner(i);
 
-            Vector3 v3 = v1 + HexMetrics.GetBridge(i);
-            Vector3 v4 = v2 + HexMetrics.GetBridge(i);
+            //Vector3 v3 = v1 + HexMetrics.GetBridge(i);
+            //Vector3 v4 = v2 + HexMetrics.GetBridge(i);
 
 
-            AddQuad(v1, v2, v3, v4);
+            //AddQuad(v1, v2, v3, v4);
 
-            //get cell neighbor
-            HexCell neighbor = cell.GetHexNeighbour(i) ?? cell;// neighbor == null ? cell : neighbor;;
+            ////get cell neighbor
+            //HexCell neighbor = cell.GetHexNeighbour(i) ?? cell;// neighbor == null ? cell : neighbor;;
 
-            //set triangle color
-            //AddQuadColor(cell.color, cell.color, (neighbor.color + cell.color + preneighbor.color) / 3f, (neighbor.color + cell.color + nexneighbor.color) / 3f);
-            AddQuadColor(cell.color, (cell.color + neighbor.color) * 0.5f);
+            ////set triangle color
+            ////AddQuadColor(cell.color, cell.color, (neighbor.color + cell.color + preneighbor.color) / 3f, (neighbor.color + cell.color + nexneighbor.color) / 3f);
+            //AddQuadColor(cell.color, (cell.color + neighbor.color) * 0.5f);
             
 
-            //----------------------------Filling the gaps
-            HexCell preneighbor = cell.GetHexNeighbour(HexDirectionExtensions.GetPreviousDir(i)) ?? cell;
-            HexCell nexneighbor = cell.GetHexNeighbour(HexDirectionExtensions.GetNextDir(i)) ?? cell;
-            AddTriangle(v1, center + HexMetrics.GetFirstDirCorner(i), v3);
-            AddTriangleColor(cell.color, (cell.color + preneighbor.color + neighbor.color) / 3f, (cell.color + neighbor.color) * 0.5f);
+            ////----------------------------Filling the gaps
+            //HexCell preneighbor = cell.GetHexNeighbour(HexDirectionExtensions.GetPreviousDir(i)) ?? cell;
+            //HexCell nexneighbor = cell.GetHexNeighbour(HexDirectionExtensions.GetNextDir(i)) ?? cell;
+            //AddTriangle(v1, center + HexMetrics.GetFirstDirCorner(i), v3);
+            //AddTriangleColor(cell.color, (cell.color + preneighbor.color + neighbor.color) / 3f, (cell.color + neighbor.color) * 0.5f);
 
-            AddTriangle(v2, v4, center + HexMetrics.GetSecDirCorner(i));
-            AddTriangleColor(cell.color, (cell.color + neighbor.color) * 0.5f, (cell.color + nexneighbor.color + neighbor.color) / 3f);
-
-            //----------------------------Filling the gaps
+            //AddTriangle(v2, v4, center + HexMetrics.GetSecDirCorner(i));
+            //AddTriangleColor(cell.color, (cell.color + neighbor.color) * 0.5f, (cell.color + nexneighbor.color + neighbor.color) / 3f);
+            ////----------------------------Filling the gaps
 		}   
 	}
+
+
+    void TriangulateConnection(HexDir dir, HexCell cell, Vector3 v1, Vector3 v2)
+    {
+
+        HexCell Neighbor = cell.GetHexNeighbour(dir);
+        if (null == Neighbor)
+            return;
+        //add rectangle
+        Vector3 v3 = v1 + HexMetrics.GetBridge(dir);
+        Vector3 v4 = v2 + HexMetrics.GetBridge(dir);
+        AddQuad(v1, v2, v3, v4);
+
+      
+        AddQuadColor(cell.color, Neighbor.color);
+
+        HexCell nextNeighbor = cell.GetHexNeighbour(HexDirectionExtensions.GetNextDir(dir));
+        
+        if (null != nextNeighbor)
+        {
+            AddTriangle(v2, v4, v2 + HexMetrics.GetBridge(HexDirectionExtensions.GetNextDir(dir)));
+            AddTriangleColor(cell.color, Neighbor.color, nextNeighbor.color);
+        }
+
+
+    }
 
     void AddQuad(Vector3 v1, Vector3 v2, Vector3 v3, Vector3 v4)
     {
