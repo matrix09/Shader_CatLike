@@ -61,12 +61,22 @@ public class HexMesh : MonoBehaviour {
 
             //get cell neighbor
             HexCell neighbor = cell.GetHexNeighbour(i) ?? cell;// neighbor == null ? cell : neighbor;;
-            //HexCell preneighbor = cell.GetHexNeighbour(HexDirectionExtensions.GetPreviousDir(i)) ?? cell;
-            //HexCell nexneighbor = cell.GetHexNeighbour(HexDirectionExtensions.GetNextDir(i)) ?? cell;
 
             //set triangle color
             //AddQuadColor(cell.color, cell.color, (neighbor.color + cell.color + preneighbor.color) / 3f, (neighbor.color + cell.color + nexneighbor.color) / 3f);
             AddQuadColor(cell.color, (cell.color + neighbor.color) * 0.5f);
+            
+
+            //----------------------------Filling the gaps
+            HexCell preneighbor = cell.GetHexNeighbour(HexDirectionExtensions.GetPreviousDir(i)) ?? cell;
+            HexCell nexneighbor = cell.GetHexNeighbour(HexDirectionExtensions.GetNextDir(i)) ?? cell;
+            AddTriangle(v1, center + HexMetrics.GetFirstDirCorner(i), v3);
+            AddTriangleColor(cell.color, (cell.color + preneighbor.color + neighbor.color) / 3f, (cell.color + neighbor.color) * 0.5f);
+
+            AddTriangle(v2, v4, center + HexMetrics.GetSecDirCorner(i));
+            AddTriangleColor(cell.color, (cell.color + neighbor.color) * 0.5f, (cell.color + nexneighbor.color + neighbor.color) / 3f);
+
+            //----------------------------Filling the gaps
 		}   
 	}
 
