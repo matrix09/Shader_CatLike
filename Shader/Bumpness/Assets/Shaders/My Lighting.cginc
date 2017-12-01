@@ -8,12 +8,16 @@
 
 float4 _Tint;
 sampler2D _MainTex;
-sampler2D _HeightMap;
-float4 _HeightMap_TexelSize;
 float4 _MainTex_ST;
+
+sampler2D _NormalMap;
+//sampler2D _HeightMap;
+//float4 _HeightMap_TexelSize;
 
 float _Metallic;
 float _Smoothness;
+
+float _BumpScale;
 
 struct VertexData {
 	float4 position : POSITION;
@@ -84,41 +88,27 @@ UnityIndirect CreateIndirectLight (Interpolators i) {
 	return indirectLight;
 }
 
-void InitializeFragmentNormal (inout/*important*/ Interpolators i) {
+void InitializeFragmentNormal(inout Interpolators i) {
+	// float2 du = float2(_HeightMap_TexelSize.x * 0.5, 0);
+	// float u1 = tex2D(_HeightMap, i.uv - du);
+	// float u2 = tex2D(_HeightMap, i.uv + du);
 
-	// //获取_HeightMap_TexelSize在X轴分量的偏移
-	// float2 delta = float2(_HeightMap_TexelSize.x, 0);
-	// //获取h1
-	// float h1 = tex2D(_HeightMap, i.uv);
-	// //获取h2
-	// float h2 = tex2D(_HeightMap, i.uv + delta);
-	// //获取法线向量
-	// //float3 normal = float3(delta.x, h2 - h1, 0);
-	// //float3 normal = float3(1, (h2 - h1), 0);//不用上面的方案，只是想控制差异
-	// float3 tangent = float3(1, (h2 - h1), 0);
+	// float2 dv = float2(0, _HeightMap_TexelSize.y * 0.5);
+	// float v1 = tex2D(_HeightMap, i.uv - dv);
+	// float v2 = tex2D(_HeightMap, i.uv + dv);
 
-	// i.normal = float3 (h1 - h2, 1, 0);//rotate 90 degree from tangent
-	// //i.normal = normalize(normal);
-	
-	float2 du = float2(_HeightMap_TexelSize.x *0.5, 0);
-	float u1 = tex2D(_HeightMap, i.uv - du);
-	float u2 = tex2D(_HeightMap, i.uv + du);
-	
-	float2 dv = float2(0, _HeightMap_TexelSize.y * 0.5);
-	float v1 = tex2D(_HeightMap, i.uv - dv);
-	float v2 = tex2D(_HeightMap, i.uv + dv);
-	
-	i.normal = float3(u1 - u2, 1, v1 - v2);
-	i.normal = normalize(i.normal);
 
-	// float h = tex2D(_HeightMap, i.uv);
-	// i.normal = float3(0, h, 0);
-	// i.normal = normalize(i.normal);
+	//i.normal = float3(u1 - u2, 1, v1 - v2);
+
+	i.normal.xy = tex2D(_NormalMap, i.uv).wy * 2 - 1;
+	i.normal.xy *= _BumpScale;
+	i.normal.z = sqrt(1 - saturate(dot(i.normal.xy, i.normal.xy)));
+	//i.normal = tex2D(_NormalMap, i.uv).xyz * 2 - 1;
+	i.normal = i.normal.xzy;//normalize(i.normal);
 }
 
 float4 MyFragmentProgram (Interpolators i) : SV_TARGET {
-	InitializeFragmentNormal (i);
-	
+	InitializeFragmentNormal(i);
 
 	float3 viewDir = normalize(_WorldSpaceCameraPos - i.worldPos);
 
