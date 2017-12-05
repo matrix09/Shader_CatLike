@@ -18,7 +18,7 @@ public class BezierTest : MonoBehaviour {
             t = 0f;
         m_tMajor.position = m_cBezierLine.GetPoint(t);
         m_tMajor.forward = m_cBezierLine.GetDir(t);
-        t += Time.deltaTime * m_fSpeed;
+        t += Time.deltaTime * m_cBezierLine.GetDeltaT(t);
 	}   
 }
 

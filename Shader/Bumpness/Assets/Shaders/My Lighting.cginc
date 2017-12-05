@@ -92,7 +92,7 @@ void InitializeFragmentNormal(inout Interpolators i) {
 	// float2 du = float2(_HeightMap_TexelSize.x * 0.5, 0);
 	// float u1 = tex2D(_HeightMap, i.uv - du);
 	// float u2 = tex2D(_HeightMap, i.uv + du);
-
+	
 	// float2 dv = float2(0, _HeightMap_TexelSize.y * 0.5);
 	// float v1 = tex2D(_HeightMap, i.uv - dv);
 	// float v2 = tex2D(_HeightMap, i.uv + dv);
