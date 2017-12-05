@@ -23,7 +23,6 @@ public class StellarRouteEditor : Editor {
         transStellar  = stellar.transform;
     }
 
-
     void OnSceneGUI()
     {
         Vector3 p0 = ShowPoint(0);
@@ -39,17 +38,16 @@ public class StellarRouteEditor : Editor {
             //(绘制p0 - p2) == (p1的dir)
             Handles.DrawLine(p0, p2);
             Handles.color = Color.blue;
-            Handles.DrawLine(p1, p1 + scaleDir * stellar.GetDir(p0, p1, p2, p3, 0));
+            Handles.DrawLine(p1, p1 + scaleDir * stellar.GetDir(0f));
             //(绘制pPreLast2 - pLast) == (pPreLast的dir)
             Handles.color = Color.gray;
             Handles.DrawLine(p1, p3);
             Handles.color = Color.blue;
-            Handles.DrawLine(p2, p2 + scaleDir * stellar.GetDir(p0, p1, p2, p3, 1));
+            Handles.DrawLine(p2, p2 + scaleDir * stellar.GetDir(1f));
 
             p0 = p3;
         }
     }
-
 
     Vector3 ShowPoint(int index)
     {
@@ -87,7 +85,6 @@ public class StellarRouteEditor : Editor {
         return point;         
   
     }
-
 
     void DrawStellarCurve(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3)
     {

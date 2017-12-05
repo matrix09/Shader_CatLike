@@ -27,7 +27,6 @@ namespace Assets.Scripts.Stellar
             return transform.TransformPoint(StellarInterface.Interp(Points[index], Points[index + 1], Points[index + 2], Points[index + 3], t));
         }
 
-
         public Vector3 Velocity(float t)
         {
             int index = 0;
@@ -44,11 +43,6 @@ namespace Assets.Scripts.Stellar
             }
 
             return transform.TransformPoint(StellarInterface.Velocity(Points[index], Points[index + 1], Points[index + 2], Points[index + 3], t)) - transform.position;
-        }
-
-        public Vector3 GetDir(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)
-        {
-            return StellarInterface.Velocity(p0, p1, p2, p3, t).normalized;
         }
 
         public Vector3 GetDir(float t)
